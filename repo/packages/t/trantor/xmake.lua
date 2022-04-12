@@ -7,9 +7,8 @@ package("trantor")
     add_versions("v1.5.5", "5a549c6efebe7ecba73a944cfba4a9713130704d4ccc82af534a2e108b9a0e71")
 
     add_deps("cmake")
-    add_deps("openssl 1.0.2u", {system=false})
+    add_deps("openssl 1.1.1m", {system=false})
     add_deps("c-ares", {optional = true})
-    add_syslinks("pthread")
     on_install("linux", function (package)
         local configs = {}
         table.insert(configs, "-DCMAKE_BUILD_TYPE=Release")

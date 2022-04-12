@@ -11,7 +11,7 @@ add_deps("hiredis", {system = false})
 add_deps("boost 1.78.0", {configs={system=true,thread=true}})
 add_syslinks("uv")
 
-on_install(function (package)
+on_install("linux", function (package)
     local configs = {}
     table.insert(configs, "-DREDIS_PLUS_PLUS_BUILD_ASYNC=libuv")
     table.insert(configs, "-DREDIS_PLUS_PLUS_ASYNC_FUTURE=boost")

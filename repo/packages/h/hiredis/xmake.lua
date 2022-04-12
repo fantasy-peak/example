@@ -8,5 +8,6 @@ add_deps("cmake")
 
 on_install("linux", function (package)
     local configs = {}
-    import("package.tools.cmake").install(package)
+    table.insert(configs, "-DCMAKE_POSITION_INDEPENDENT_CODE=ON")
+    import("package.tools.cmake").install(package, configs)
 end)

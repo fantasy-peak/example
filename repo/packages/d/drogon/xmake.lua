@@ -8,9 +8,10 @@ package("drogon")
     add_versions("v1.7.5", "e2af7c55dcabafef16f26f5b3242692f5a2b54c19b7b626840bf9132d24766f6")
 
     add_deps("cmake")
-    add_deps("jsoncpp", "brotli", "zlib")
-    add_syslinks("pthread", "dl")
     add_deps("trantor")
+    add_deps("jsoncpp", {system=false})
+    add_deps("zlib", {system=false})
+    add_deps("brotli", {system=false})
     on_install("linux", function (package)
         local configs = {}
         table.insert(configs, "-DBUILD_POSTGRESQL=OFF")
