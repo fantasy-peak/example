@@ -11,7 +11,7 @@ package("drogon")
     add_deps("jsoncpp", "brotli", "zlib")
     add_syslinks("pthread", "dl")
     add_deps("trantor")
-    on_install(function (package)
+    on_install("linux", function (package)
         local configs = {}
         table.insert(configs, "-DBUILD_POSTGRESQL=OFF")
         table.insert(configs, "-DLIBPQ_BATCH_MODE=OFF")

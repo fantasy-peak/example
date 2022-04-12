@@ -1,5 +1,4 @@
 package("trantor")
-
     set_homepage("https://github.com/an-tao/trantor/")
     set_description("a non-blocking I/O tcp network lib based on c++14/17")
     set_license("BSD-3-Clause")
@@ -8,6 +7,7 @@ package("trantor")
     add_versions("v1.5.5", "5a549c6efebe7ecba73a944cfba4a9713130704d4ccc82af534a2e108b9a0e71")
 
     add_deps("cmake")
+    add_deps("openssl 1.0.2u", {system=false})
     add_deps("c-ares", {optional = true})
     add_syslinks("pthread")
     on_install("linux", function (package)

@@ -7,7 +7,7 @@ set_license("Apache-2.0 License")
 add_urls("https://github.com/sewenew/redis-plus-plus.git")
 
 add_deps("cmake")
-add_deps("hiredis")
+add_deps("hiredis", {system = false})
 add_deps("boost 1.78.0", {configs={system=true,thread=true}})
 add_syslinks("uv")
 
