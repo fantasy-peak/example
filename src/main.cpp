@@ -132,7 +132,9 @@ int main(int argc, char** argv) {
 		};
 		auto f = make_task().scheduleOn(&thread_pool).start();
 		try {
-			auto ret = co_await folly::coro::toTask(std::move(f));
+			auto ret = co_await std::move(f);
+			// or
+			// auto ret = co_await folly::coro::toTask(std::move(f));
 		} catch (const std::runtime_error& e) {
 			spdlog::error("{}", e.what());
 		}
@@ -188,6 +190,13 @@ int main(int argc, char** argv) {
 	};
 	auto t1 = test_timeout().scheduleOn(&thread_pool).start();
 	std::move(t1).get();
+
+	folly::coro::blockingWait([]() -> folly::coro::Task<void> {
+		auto [promise, future] = folly::makePromiseContract<int>();
+		promise.setException(std::runtime_error(""));
+		auto res = co_await folly::coro::co_awaitTry(std::move(future));
+		spdlog::info("hasException: {}", res.hasException<std::runtime_error>());
+	}());
 
 	return 0;
 }
