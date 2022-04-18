@@ -15,6 +15,16 @@ endif()
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
 
 #-----------------------------------------------------------------------------------
+
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-lambda-cpp/xmake.lua)
+xrepo_package("aws-lambda-cpp" DEPS "openssl 1.1.1n" "libcurl")
+find_package(aws-lambda-runtime REQUIRED)
+
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-sdk-cpp/xmake.lua)
+xrepo_package("aws-sdk-cpp" DEPS "openssl 1.1.1n" "libcurl" "c-ares")
+find_package(AWSSDK COMPONENTS core)
+find_package(AWSSDK COMPONENTS dynamodb)
+
 xrepo_package("fmt 8.1.1")
 find_package(fmt REQUIRED)
 
@@ -33,14 +43,6 @@ xrepo_package("drogon" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/r/redis-plus-plus/xmake.lua)
 xrepo_package("redis-plus-plus" DEPS "hiredis" "boost 1.78.0")
 
-set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-lambda-cpp/xmake.lua)
-xrepo_package("aws-lambda-cpp")
-find_package(aws-lambda-runtime REQUIRED)
-
-set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-sdk-cpp/xmake.lua)
-xrepo_package("aws-sdk-cpp")
-find_package(AWSSDK COMPONENTS core)
-find_package(AWSSDK COMPONENTS dynamodb)
 #-----------------------------------------------------------------------------------
 
 include_directories(include)

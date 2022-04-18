@@ -3,6 +3,7 @@ set_version("0.0.1", {build = "%Y%m%d%H%M"})
 set_xmakever("2.1.0")
 
 add_repositories("repo repo")
+add_requires("curl", {system=false})
 add_requires("folly", "redis-plus-plus 1.3.3", "trantor", "drogon")
 add_requires("fmt 8.1.1", "spdlog v1.9.2", "nlohmann_json v3.10.5")
 

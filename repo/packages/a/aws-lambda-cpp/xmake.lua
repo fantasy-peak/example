@@ -5,6 +5,9 @@ set_description("C++ implementation of the AWS Lambda runtime")
 
 add_urls("https://github.com/awslabs/aws-lambda-cpp.git")
 
+add_deps("openssl 1.1.1n", {system=false})
+add_deps("libcurl", {system=false})
+
 on_install("linux", function (package)
     local configs = {}
     table.insert(configs, "-DCMAKE_BUILD_TYPE=Release")
