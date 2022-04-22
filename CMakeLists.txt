@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 3.13.0)
 project(xmake-example)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS "-fcoroutines")
+set(OPTFLAGS -gdwarf-2 -O2)
+set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers)
+add_compile_options(${OPTFLAGS} ${WARNINGS})
 
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
     message(STATUS "Downloading xrepo.cmake from https://github.com/xmake-io/xrepo-cmake/")
@@ -49,6 +51,7 @@ include_directories(include)
 
 add_executable(example-bin "")
 target_sources(example-bin PRIVATE src/main.cpp)
+
 # xrepo_target_packages(example-bin publi fmt spdlog nlohmann_json folly drogon trantor redis++)
 xrepo_target_packages(example-bin PUBLIC fmt spdlog nlohmann_json aws-lambda-runtime aws-sdk-cpp folly drogon redis-plus-plus NO_LINK_LIBRARIES)
 target_link_libraries(example-bin PUBLIC fmt 

@@ -50,6 +50,12 @@
 #include <aws/dynamodb/model/QueryRequest.h>
 #include <aws/lambda-runtime/runtime.h>
 
+#include <boost/math/constants/constants.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 using namespace std::chrono_literals;
 
 void init(int argc, char** argv) {
@@ -92,6 +98,12 @@ std::function<std::shared_ptr<Aws::Utils::Logging::LogSystemInterface>()> GetCon
 
 int main(int argc, char** argv) {
 	try {
+		boost::uuids::random_generator generator;
+		boost::uuids::uuid uuid1 = generator();
+		std::cout << uuid1 << std::endl;
+		boost::multiprecision::cpp_dec_float_50 decimal = 0.45;
+		std::cout << decimal << std::endl;
+
 		Aws::SDKOptions options;
 		options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Trace;
 		options.loggingOptions.logger_create_fn = GetConsoleLoggerFactory();
@@ -198,7 +210,7 @@ int main(int argc, char** argv) {
 		};
 		auto f = make_task().scheduleOn(&thread_pool).start();
 		try {
-			auto ret = co_await std::move(f);
+			[[maybe_unused]] auto ret = co_await std::move(f);
 			// or
 			// auto ret = co_await folly::coro::toTask(std::move(f));
 		} catch (const std::runtime_error& e) {
