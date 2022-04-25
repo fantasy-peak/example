@@ -1,3 +1,6 @@
+#include "greeter_async_client.h"
+#include "greeter_async_server.h"
+
 #include "xmake_example.h"
 
 #include <drogon/drogon.h>
@@ -59,7 +62,7 @@
 using namespace std::chrono_literals;
 
 void init(int argc, char** argv) {
-	// folly::init(&argc, &argv);
+	folly::init(&argc, &argv);
 	folly::SingletonVault::singleton()->registrationComplete();
 }
 
@@ -97,13 +100,24 @@ std::function<std::shared_ptr<Aws::Utils::Logging::LogSystemInterface>()> GetCon
 }
 
 int main(int argc, char** argv) {
+	std::thread([] {
+		ServerImpl server;
+		server.Run();
+	}).detach();
+	std::thread([] {
+		std::string target_str = "localhost:50051";
+		GreeterClient greeter(
+			grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+		std::string user("world");
+		std::string reply = greeter.SayHello(user);
+		std::cout << "Greeter received: " << reply << std::endl;
+	}).detach();
+	boost::uuids::random_generator generator;
+	boost::uuids::uuid uuid1 = generator();
+	std::cout << uuid1 << std::endl;
+	boost::multiprecision::cpp_dec_float_50 decimal = 0.45;
+	std::cout << decimal << std::endl;
 	try {
-		boost::uuids::random_generator generator;
-		boost::uuids::uuid uuid1 = generator();
-		std::cout << uuid1 << std::endl;
-		boost::multiprecision::cpp_dec_float_50 decimal = 0.45;
-		std::cout << decimal << std::endl;
-
 		Aws::SDKOptions options;
 		options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Trace;
 		options.loggingOptions.logger_create_fn = GetConsoleLoggerFactory();
@@ -211,7 +225,6 @@ int main(int argc, char** argv) {
 		auto f = make_task().scheduleOn(&thread_pool).start();
 		try {
 			[[maybe_unused]] auto ret = co_await std::move(f);
-			// or
 			// auto ret = co_await folly::coro::toTask(std::move(f));
 		} catch (const std::runtime_error& e) {
 			spdlog::error("{}", e.what());
