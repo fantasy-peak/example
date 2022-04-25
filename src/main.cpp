@@ -197,7 +197,8 @@ int main(int argc, char** argv) {
 
 	auto make_task = [&]() -> folly::coro::Task<void> {
 		spdlog::info("start folly::coro::sleep");
-		co_await folly::coro::sleep(1s, folly::Singleton<folly::ThreadWheelTimekeeper>::get());
+		auto ptr = folly::Singleton<folly::ThreadWheelTimekeeper>::try_get();
+		co_await folly::coro::sleep(1s, ptr.get());
 		spdlog::info("end folly::coro::sleep");
 		co_return;
 	};
