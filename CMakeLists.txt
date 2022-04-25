@@ -11,12 +11,15 @@ add_compile_options(${OPTFLAGS} ${WARNINGS})
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
     message(STATUS "Downloading xrepo.cmake from https://github.com/xmake-io/xrepo-cmake/")
     # mirror https://cdn.jsdelivr.net/gh/xmake-io/xrepo-cmake@main/xrepo.cmake
-    file(DOWNLOAD "https://raw.githubusercontent.com/xmake-io/xrepo-cmake/main/xrepo.cmake"
+    file(DOWNLOAD "https://raw.githubusercontent.com/nqf/xrepo-cmake/main/xrepo.cmake"
                   "${CMAKE_BINARY_DIR}/xrepo.cmake"
                   TLS_VERIFY ON)
 endif()
+
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
 
+set(XREPO_PACKAGE_VERBOSE ON)
+set(XEPO_PARALLEL_JOBS_XMAKE "12")
 #-----------------------------------------------------------------------------------
 
 xrepo_package("fmt 8.1.1")
