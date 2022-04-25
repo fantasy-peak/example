@@ -68,11 +68,12 @@ xrepo_target_packages(example-bin PUBLIC spdlog nlohmann_json aws-lambda-runtime
 target_link_libraries(example-bin PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++
     AWS::aws-lambda-runtime
     ${AWSSDK_LINK_LIBRARIES}
-    aws-cpp-sdk-dynamodb
-    curl
-    drogon trantor jsoncpp brotlidec brotlienc brotlicommon redis++ hiredis folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    aws-cpp-sdk-dynamodb curl
+    drogon trantor jsoncpp brotlidec brotlienc brotlicommon
+    redis++ hiredis
+    folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
     boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
-    ssl crypto cares uuid -pthread dl z
+    ssl crypto cares uuid pthread dl
 )
 
 
