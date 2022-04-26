@@ -18,6 +18,8 @@ endif()
 
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
 
+execute_process(COMMAND xmake repo -a -g my_private_repo https://github.com/fantasy-peak/xmake-repo.git)
+
 set(XREPO_PACKAGE_VERBOSE ON)
 set(XEPO_PARALLEL_JOBS_XMAKE "12")
 #-----------------------------------------------------------------------------------
@@ -29,6 +31,9 @@ xrepo_package("spdlog v1.9.2")
 # find_package(spdlog REQUIRED)
 
 xrepo_package("nlohmann_json v3.10.5")
+
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/d/drogon/xmake.lua)
+xrepo_package("drogon" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0.9")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-lambda-cpp/xmake.lua)
 xrepo_package("aws-lambda-cpp" DEPS "openssl 1.1.1n" "libcurl")
@@ -42,9 +47,6 @@ find_package(AWSSDK COMPONENTS dynamodb)
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/f/folly/xmake.lua)
 xrepo_package("folly 2022.04.25" DEPS "conan::libiberty/9.1.0" "boost 1.78.0" "openssl 1.1.1n" "libevent 2.1.12" "gflags v2.2.2" "glog v0.5.0" "fmt 8.1.1" "zlib v1.2.12" "double-conversion v3.1.5" "bzip2 1.0.8" "lz4 v1.9.3" "zstd v1.5.2")
 # find_package(folly REQUIRED)
-
-set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/d/drogon/xmake.lua)
-xrepo_package("drogon" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0.9")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/r/redis-plus-plus/xmake.lua)
 xrepo_package("redis-plus-plus" DEPS "hiredis" "boost 1.78.0")

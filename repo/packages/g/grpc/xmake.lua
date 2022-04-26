@@ -7,7 +7,7 @@ package("grpc")
     add_deps("cmake")
 
     -- add_deps("abseil 20211102.0", {system=false})
-    add_deps("c-ares 1.17.1", {system=false})
+    add_deps("c-ares", {system=false})
     add_deps("protobuf-cpp 3.19.4", {system=false})
     add_deps("re2 2022.02.01", {system=false})
     add_deps("openssl 1.1.1n", {system=false})
