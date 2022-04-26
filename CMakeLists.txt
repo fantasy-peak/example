@@ -9,20 +9,21 @@ set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers)
 add_compile_options(${OPTFLAGS} ${WARNINGS})
 
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
-    message(STATUS "Downloading xrepo.cmake from https://github.com/xmake-io/xrepo-cmake/")
+    message(STATUS "Downloading xrepo.cmake from https://github.com/fantasy-peak/xrepo-cmake.git")
     # mirror https://cdn.jsdelivr.net/gh/xmake-io/xrepo-cmake@main/xrepo.cmake
-    file(DOWNLOAD "https://raw.githubusercontent.com/nqf/xrepo-cmake/main/xrepo.cmake"
+    file(DOWNLOAD "https://raw.githubusercontent.com/fantasy-peak/xrepo-cmake/main/xrepo.cmake"
                   "${CMAKE_BINARY_DIR}/xrepo.cmake"
                   TLS_VERIFY ON)
 endif()
+
+set(XREPO_PACKAGE_VERBOSE ON)
+set(XREPO_BUILD_PARALLEL_JOBS 12)
 
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
 
 execute_process(COMMAND xmake repo -a -g my_private_repo https://github.com/fantasy-peak/xmake-repo.git)
 
-set(XREPO_PACKAGE_VERBOSE ON)
-set(XEPO_PARALLEL_JOBS_XMAKE "12")
-#-----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 
 xrepo_package("fmt 8.1.1")
 # find_package(fmt REQUIRED)
