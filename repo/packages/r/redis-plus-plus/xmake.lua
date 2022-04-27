@@ -9,7 +9,7 @@ add_urls("https://github.com/sewenew/redis-plus-plus.git")
 add_deps("cmake")
 add_deps("hiredis", {system = false})
 add_deps("boost 1.78.0", {configs={system=true,thread=true}})
-add_syslinks("uv")
+add_deps("libuv", {system = false})
 
 on_install("linux", function (package)
     local configs = {}
