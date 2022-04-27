@@ -59,6 +59,10 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+#include <sqlpp11/mysql/mysql.h>
+#include <sqlpp11/sqlpp11.h>
+#include <TestSqlppTable.h>
+
 using namespace std::chrono_literals;
 
 void init(int argc, char** argv) {
@@ -100,6 +104,44 @@ std::function<std::shared_ptr<Aws::Utils::Logging::LogSystemInterface>()> GetCon
 }
 
 int main(int argc, char** argv) {
+	try {
+		// ~/.xmake/packages/s/sqlpp11/0.61/954c070d3e81433da1f5ee354493f1fa/bin/sqlpp11-ddl2cpp ./test_sqlpp_table.sql TestSqlppTable TestProject
+		// export LIBRARY_PATH="/usr/lib64/mysql:$LIBRARY_PATH"
+		// export CPLUS_INCLUDE_PATH="/usr/include/mysql/:$CPLUS_INCLUDE_PATH"
+		sqlpp::mysql::connection_config config;
+		config.host = "127.0.0.1";
+		config.user = "mybb";
+		config.password = "changeme";
+		config.database = "mybb";
+		config.port = 3307;
+		config.auto_reconnect = true;
+		config.debug = false;
+		auto config_ptr = std::make_shared<sqlpp::mysql::connection_config>(std::move(config));
+		sqlpp::mysql::connection db(config_ptr);
+		db.execute(R"(DROP TABLE IF EXISTS TestSqlppTable)");
+		db.execute(R"(CREATE TABLE TestSqlppTable (name VARCHAR(100),age INTEGER))");
+		// insert
+		TestProject::TestSqlppTable stu{};
+		db(sqlpp::insert_into(stu).set(stu.age = 12, stu.name = "one"));
+		// 插入多行
+		auto multi_insert = sqlpp::insert_into(stu).columns(stu.age, stu.name);
+		for (int i = 0; i < 10; i++) {
+			std::ostringstream ostr;
+			ostr << "linyiong" << i;
+			multi_insert.values.add(stu.age = i, stu.name = ostr.str());
+		}
+		db(multi_insert);
+		// delete
+		db(sqlpp::remove_from(stu).where(stu.age == 12));
+		// select
+		for (const auto& row : db(sqlpp::select(stu.name, stu.age).from(stu).where(stu.age > 1))) {
+			std::cout << row.name << ":" << row.age << std::endl;
+		}
+		// update
+		db(sqlpp::update(stu).set(stu.name = "linyilong3").where(stu.age>3));
+	} catch (const sqlpp::exception& e) {
+		spdlog::error("{}", e.what());
+	}
 	std::thread([] {
 		ServerImpl server;
 		server.Run();

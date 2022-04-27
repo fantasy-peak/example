@@ -1,0 +1,1 @@
+CREATE TABLE TestSqlppTable (name VARCHAR(100),age INTEGER)

@@ -56,6 +56,9 @@ set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/g/grpc/xmake.lua)
 xrepo_package("grpc" DEPS "c-ares 1.17.1" "protobuf-cpp 3.19.4" "re2 2022.02.01" "openssl 1.1.1n" "zlib v1.2.12")
 find_package(gRPC CONFIG REQUIRED)
 
+xrepo_package("sqlpp11" CONFIGS mariadb_connector=true)
+# find_package(Sqlpp11 CONFIG REQUIRED)
+
 #-----------------------------------------------------------------------------------
 
 include_directories(include)
@@ -67,8 +70,9 @@ target_sources(example-bin PRIVATE
     src/helloworld.grpc.pb.cc
 )
 
-xrepo_target_packages(example-bin PUBLIC spdlog nlohmann_json aws-lambda-runtime aws-sdk-cpp folly drogon redis-plus-plus grpc NO_LINK_LIBRARIES)
+xrepo_target_packages(example-bin PUBLIC sqlpp11 spdlog nlohmann_json aws-lambda-runtime aws-sdk-cpp folly drogon redis-plus-plus grpc NO_LINK_LIBRARIES)
 target_link_libraries(example-bin PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++
+    mysqlclient
     AWS::aws-lambda-runtime
     ${AWSSDK_LINK_LIBRARIES}
     aws-cpp-sdk-dynamodb curl
@@ -78,5 +82,6 @@ target_link_libraries(example-bin PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::gr
     boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
     ssl crypto cares uuid pthread dl
 )
+
 
 
