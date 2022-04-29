@@ -4,8 +4,8 @@ project(xmake-example)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(OPTFLAGS -gdwarf-2 -O2)
-set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers)
+set(OPTFLAGS -gdwarf-2)
+set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers -g)
 add_compile_options(${OPTFLAGS} ${WARNINGS})
 
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
@@ -81,6 +81,49 @@ target_link_libraries(example-bin PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::gr
     folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
     boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
     ssl crypto cares uuid pthread dl
+)
+
+add_executable(test_folly src/test_folly.cpp)
+xrepo_target_packages(test_folly PUBLIC fmt spdlog folly  NO_LINK_LIBRARIES)
+target_link_libraries(test_folly PUBLIC
+    folly glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto pthread dl
+)
+
+add_executable(test_drogon src/test_drogon.cpp)
+xrepo_target_packages(test_drogon PUBLIC fmt spdlog folly drogon NO_LINK_LIBRARIES)
+target_link_libraries(test_drogon PUBLIC
+    drogon trantor jsoncpp brotlidec brotlienc brotlicommon z
+    folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto cares uuid pthread dl
+)
+
+add_executable(test_redis++ src/test_redis++.cpp)
+xrepo_target_packages(test_redis++ PUBLIC fmt spdlog folly redis-plus-plus NO_LINK_LIBRARIES)
+target_link_libraries(test_redis++ PUBLIC
+    redis++ hiredis
+    folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto pthread dl
+)
+
+add_executable(test_aws_lambda src/test_aws_lambda.cpp)
+xrepo_target_packages(test_aws_lambda PUBLIC nlohmann_json aws-lambda-runtime aws-sdk-cpp NO_LINK_LIBRARIES)
+target_link_libraries(test_aws_lambda PUBLIC
+    AWS::aws-lambda-runtime
+    ${AWSSDK_LINK_LIBRARIES}
+    aws-cpp-sdk-dynamodb curl
+    ssl crypto pthread dl
+)
+
+add_executable(test_asio src/test_asio.cpp)
+xrepo_target_packages(test_asio PUBLIC spdlog folly NO_LINK_LIBRARIES)
+target_link_libraries(test_asio PUBLIC
+    folly glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto pthread dl
 )
 
 
