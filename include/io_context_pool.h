@@ -39,12 +39,10 @@ inline void IoContextPool::start() {
 inline void IoContextPool::stop() {
 	for (auto& context_ptr : m_io_contexts)
 		context_ptr->stop();
-	printf("ddddddddddddddddd\n");
 	for (auto& th : m_threads) {
 		if (th.joinable())
 			th.join();
 	}
-	printf("IoContextPool::stop end\n");
 }
 
 inline boost::asio::io_context& IoContextPool::getIoContext() {

@@ -39,20 +39,6 @@ std::pair<boost::system::error_code, boost::asio::ip::tcp::socket> connect(
 	return std::make_pair(error, std::move(s));
 }
 
-// class AsioExecutor : public async_simple::Executor {
-// public:
-// 	AsioExecutor(boost::asio::io_context& io_context)
-// 		: io_context_(io_context) {}
-
-// 	virtual bool schedule(Func func) override {
-// 		boost::asio::post(io_context_, std::move(func));
-// 		return true;
-// 	}
-
-// private:
-// 	boost::asio::io_context& io_context_;
-// };
-
 class AcceptorAwaiter {
 public:
 	AcceptorAwaiter(boost::asio::ip::tcp::acceptor& acceptor,
@@ -245,4 +231,28 @@ inline folly::coro::Task<boost::system::error_code> async_connect(
 	boost::asio::io_context& io_context, boost::asio::ip::tcp::socket& socket,
 	const std::string& host, const std::string& port) noexcept {
 	co_return co_await ConnectAwaiter{io_context, socket, host, port};
+}
+
+class TimerAwaiter {
+public:
+	TimerAwaiter(boost::asio::steady_timer& steady_timer_)
+		: steady_timer_(steady_timer_) {
+	}
+
+	bool await_ready() const noexcept { return false; }
+	void await_suspend(std::coroutine_handle<> handle) {
+		steady_timer_.async_wait([this, handle](const boost::system::error_code& ec) {
+			ec_ = ec;
+			handle.resume();
+		});
+	}
+	auto await_resume() noexcept { return ec_; }
+
+private:
+	boost::asio::steady_timer& steady_timer_;
+	boost::system::error_code ec_{};
+};
+
+inline folly::coro::Task<boost::system::error_code> timeout(boost::asio::steady_timer& steady_timer_) noexcept {
+	co_return co_await TimerAwaiter{steady_timer_};
 }

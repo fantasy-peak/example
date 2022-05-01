@@ -9,9 +9,9 @@ set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers -g)
 add_compile_options(${OPTFLAGS} ${WARNINGS})
 
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
-    message(STATUS "Downloading xrepo.cmake from https://github.com/fantasy-peak/xrepo-cmake.git")
+    message(STATUS "Downloading xrepo.cmake from https://github.com/xmake-io/xrepo-cmake/")
     # mirror https://cdn.jsdelivr.net/gh/xmake-io/xrepo-cmake@main/xrepo.cmake
-    file(DOWNLOAD "https://raw.githubusercontent.com/fantasy-peak/xrepo-cmake/main/xrepo.cmake"
+    file(DOWNLOAD "https://raw.githubusercontent.com/xmake-io/xrepo-cmake/main/xrepo.cmake"
                   "${CMAKE_BINARY_DIR}/xrepo.cmake"
                   TLS_VERIFY ON)
 endif()
@@ -118,9 +118,17 @@ target_link_libraries(test_aws_lambda PUBLIC
     ssl crypto pthread dl
 )
 
-add_executable(test_asio src/test_asio.cpp)
-xrepo_target_packages(test_asio PUBLIC spdlog folly NO_LINK_LIBRARIES)
-target_link_libraries(test_asio PUBLIC
+add_executable(test_tcp_server src/test_tcp_server.cpp)
+xrepo_target_packages(test_tcp_server PUBLIC spdlog folly NO_LINK_LIBRARIES)
+target_link_libraries(test_tcp_server PUBLIC
+    folly glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto pthread dl
+)
+
+add_executable(test_tcp_client src/test_tcp_client.cpp)
+xrepo_target_packages(test_tcp_client PUBLIC spdlog folly NO_LINK_LIBRARIES)
+target_link_libraries(test_tcp_client PUBLIC
     folly glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
     boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
     ssl crypto pthread dl
