@@ -50,7 +50,12 @@ public:
 	}
 
 	folly::coro::Task<void> start() {
-		boost::asio::ip::tcp::acceptor acceptor(m_pool.getIoContext(), boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8848));
+		boost::asio::ip::tcp::acceptor acceptor(m_pool.getIoContext());
+		boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 8848));
+		acceptor.open(endpoint.protocol());
+		acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
+		acceptor.bind(endpoint);
+		acceptor.listen();
 		for (;;) {
 			auto& context = m_pool.getIoContext();
 			if (!m_executor_map.contains(&context))
