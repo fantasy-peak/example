@@ -23,7 +23,7 @@ folly::coro::Task<void> start(boost::asio::io_context& io_context, std::string h
 		co_await async_write(socket, boost::asio::buffer(write_buf, max_length));
 		auto [error, reply_length] = co_await async_read_some(socket, boost::asio::buffer(read_buf, max_length));
 		if (error == boost::asio::error::eof) {
-			spdlog::error("client close");
+			spdlog::error("server close");
 			break;
 		}
 		else if (error) {

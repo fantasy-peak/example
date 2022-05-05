@@ -28,13 +28,13 @@ public:
 
 	folly::coro::Task<void> session(boost::asio::ip::tcp::socket sock, boost::asio::steady_timer steady_timer) {
 		constexpr int32_t max_length = 1024;
+		spdlog::info("start test timeout");
+		steady_timer.expires_after(std::chrono::seconds(2));
+		auto ec_ = co_await timeout(steady_timer);
+		spdlog::info("end test timeout: {}", ec_.message());
+		// https://www.boost.org/doc/libs/master/boost/asio/error.hpp
+		// ec == boost::asio::error::operation_aborted ?
 		for (;;) {
-			spdlog::info("start test timeout");
-			steady_timer.expires_after(std::chrono::seconds(2));
-			auto ec = co_await timeout(steady_timer);
-			// https://www.boost.org/doc/libs/master/boost/asio/error.hpp
-			// ec == boost::asio::error::operation_aborted ?
-			spdlog::info("end test timeout: {}", ec.message());
 			char data[max_length]{};
 			auto [error, length] = co_await async_read_some(sock, boost::asio::buffer(data, max_length));
 			if (error) {
