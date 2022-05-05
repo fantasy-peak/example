@@ -1,4 +1,3 @@
-
 #include <spdlog/spdlog.h>
 
 #include <folly/Portability.h>

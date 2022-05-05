@@ -1,4 +1,3 @@
-
 #include <nlohmann/json.hpp>
 
 #include <aws/core/Aws.h>

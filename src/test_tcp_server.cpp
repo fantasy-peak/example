@@ -1,4 +1,3 @@
-
 #include <io_context_pool.h>
 #include <asio_util.hpp>
 
