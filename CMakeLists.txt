@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0)
 
-project(xmake-example)
+project(example)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -59,19 +59,20 @@ find_package(gRPC CONFIG REQUIRED)
 xrepo_package("sqlpp11" CONFIGS mariadb_connector=true)
 # find_package(Sqlpp11 CONFIG REQUIRED)
 
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/b/boost/xmake.lua)
+xrepo_package("boost 1.79.0" CONFIGS "context=true,filesystem=true,program_options=true,regex=true,system=true,thread=true")
+
 #-----------------------------------------------------------------------------------
 
 include_directories(include)
 
-add_executable(example-bin "")
-target_sources(example-bin PRIVATE 
-    src/main.cpp
+add_executable(test
+    src/test.cpp
     src/helloworld.pb.cc
     src/helloworld.grpc.pb.cc
 )
-
-xrepo_target_packages(example-bin PUBLIC sqlpp11 spdlog nlohmann_json aws-lambda-runtime aws-sdk-cpp folly drogon redis-plus-plus grpc NO_LINK_LIBRARIES)
-target_link_libraries(example-bin PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++
+xrepo_target_packages(test PUBLIC sqlpp11 spdlog nlohmann_json aws-lambda-runtime aws-sdk-cpp folly drogon redis-plus-plus grpc NO_LINK_LIBRARIES)
+target_link_libraries(test PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++
     mysqlclient
     AWS::aws-lambda-runtime
     ${AWSSDK_LINK_LIBRARIES}
@@ -134,5 +135,9 @@ target_link_libraries(test_tcp_client PUBLIC
     ssl crypto pthread dl
 )
 
-
-
+add_executable(test_boost src/test_boost.cpp)
+xrepo_target_packages(test_boost PUBLIC spdlog boost NO_LINK_LIBRARIES)
+target_link_libraries(test_boost PUBLIC
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    pthread dl
+)
