@@ -17,6 +17,7 @@
 #include <folly/experimental/coro/FutureUtil.h>
 #include <folly/experimental/coro/Generator.h>
 #include <folly/experimental/coro/Mutex.h>
+#include <folly/experimental/coro/Promise.h>
 #include <folly/experimental/coro/SharedMutex.h>
 #include <folly/experimental/coro/Sleep.h>
 #include <folly/experimental/coro/Task.h>
@@ -149,6 +150,28 @@ int main(int argc, char** argv) {
 	}).scheduleOn(&thread_pool).start();
 	// clang-format on
 
+	folly::coro::blockingWait([]() -> folly::coro::Task<void> {
+		auto [promise, future] = folly::coro::makePromiseContract<int>();
+		auto waiter = [](auto future) -> folly::coro::Task<int> {
+			co_return co_await std::move(future);
+		}(std::move(future));
+
+		auto fulfiller = [](auto promise) -> folly::coro::Task<> {
+			promise.setValue(42);
+			//promise.setException(std::logic_error("test error"));
+			co_return;
+		}(std::move(promise));
+
+		auto [res, _] = co_await folly::coro::collectAll(
+			folly::coro::co_awaitTry(std::move(waiter)), std::move(fulfiller));
+
+		if (res.hasException<std::logic_error>()) {
+			spdlog::info("hasException: {}", res.exception().what());
+		}
+		if (res.hasValue()) {
+			spdlog::info("value: {}", res.value());
+		}
+	}());
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	return 0;
