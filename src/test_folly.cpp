@@ -116,10 +116,25 @@ int main(int argc, char** argv) {
 		spdlog::info("a: {}, b: {}, c: {}", a.hasValue(), b.hasValue(), c.hasException());
 	}());
 
+	struct Awaiter {
+		Awaiter() {}
+		bool await_ready() { return false; }
+		void await_suspend(std::coroutine_handle<> handle) {
+			auto func = [this, handle]() mutable {
+				std::this_thread::sleep_for(std::chrono::seconds(5));
+				spdlog::info("-----------resume-------------------");
+				handle.resume();
+			};
+			std::thread(std::move(func)).detach();
+		}
+		void await_resume() {}
+	};
+
 	auto test_timeout = [&]() -> folly::coro::Task<> {
 		spdlog::info("test_timeout thread id: {}", get_id());
 		auto make_task = [&]() -> folly::coro::Task<int> {
-			co_await folly::coro::sleep(std::chrono::seconds(0), thread_wheel_timekeeper_ptr.get());
+			spdlog::info("start timeout Awaiter");
+			co_await Awaiter{};
 			spdlog::info("timeout return 42");
 			co_return 42;
 		};
