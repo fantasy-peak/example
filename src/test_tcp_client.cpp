@@ -4,7 +4,6 @@
 
 #include <spdlog/spdlog.h>
 
-#include <folly/executors/CPUThreadPoolExecutor.h>
 #include <folly/experimental/coro/BlockingWait.h>
 
 folly::coro::Task<void> start(boost::asio::io_context& io_context, std::string host, std::string port) {

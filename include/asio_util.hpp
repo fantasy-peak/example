@@ -9,6 +9,18 @@
 
 #include <boost/asio.hpp>
 
+class Executor : public folly::Executor {
+public:
+	Executor(boost::asio::io_context& io_context)
+		: m_io_context(io_context) {
+	}
+
+	virtual void add(folly::Func func) override {
+		boost::asio::post(m_io_context, std::move(func));
+	}
+
+	boost::asio::io_context& m_io_context;
+};
 class AcceptorAwaiter {
 public:
 	AcceptorAwaiter(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::ip::tcp::socket& socket)

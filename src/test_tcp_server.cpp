@@ -4,21 +4,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include <folly/executors/CPUThreadPoolExecutor.h>
 #include <folly/experimental/coro/BlockingWait.h>
-
-class Executor : public folly::Executor {
-public:
-	Executor(boost::asio::io_context& io_context)
-		: m_io_context(io_context) {
-	}
-
-	virtual void add(folly::Func func) override {
-		boost::asio::post(m_io_context, std::move(func));
-	}
-
-	boost::asio::io_context& m_io_context;
-};
 
 class TcpServer final {
 public:
