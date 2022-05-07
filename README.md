@@ -2,6 +2,11 @@
 ```
 // install mysql client
 sudo yum install mysql
+sudo yum install mysql++-devel.x86_64
+sudo yum install -y automake
+sudo yum install libuuid-devel.x86_64
+sudo pip3 install conan
+
 export CPLUS_INCLUDE_PATH="/usr/include/mysql/:$CPLUS_INCLUDE_PATH"
 export LIBRARY_PATH=/usr/lib64/mysql/:$LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/lib64/mysql/:$LD_LIBRARY_PATH

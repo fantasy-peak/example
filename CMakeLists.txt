@@ -62,6 +62,10 @@ xrepo_package("sqlpp11" CONFIGS mariadb_connector=true)
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/b/boost/xmake.lua)
 xrepo_package("boost 1.79.0" CONFIGS "context=true,filesystem=true,program_options=true,regex=true,system=true,thread=true")
 
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/y/yaml_cpp_struct/xmake.lua)
+xrepo_package("yaml_cpp_struct main" DEPS "magic_enum" "visit_struct" "yaml-cpp")
+
+
 #-----------------------------------------------------------------------------------
 
 include_directories(include)
@@ -141,3 +145,7 @@ target_link_libraries(test_boost PUBLIC
     boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
     pthread dl
 )
+
+add_executable(test_yaml_cpp_struct src/test_yaml_cpp_struct.cpp)
+xrepo_target_packages(test_yaml_cpp_struct PUBLIC spdlog yaml_cpp_struct NO_LINK_LIBRARIES)
+target_link_libraries(test_yaml_cpp_struct PUBLIC yaml-cpp)
