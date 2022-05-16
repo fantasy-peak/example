@@ -65,6 +65,8 @@ xrepo_package("boost 1.79.0" CONFIGS "context=true,filesystem=true,program_optio
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/y/yaml_cpp_struct/xmake.lua)
 xrepo_package("yaml_cpp_struct main" DEPS "magic_enum" "visit_struct" "yaml-cpp")
 
+set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/l/libmysql/xmake.lua)
+xrepo_package("libmysql" DEPS "boost 1.79.0")
 
 #-----------------------------------------------------------------------------------
 
@@ -149,3 +151,11 @@ target_link_libraries(test_boost PUBLIC
 add_executable(test_yaml_cpp_struct src/test_yaml_cpp_struct.cpp)
 xrepo_target_packages(test_yaml_cpp_struct PUBLIC spdlog yaml_cpp_struct NO_LINK_LIBRARIES)
 target_link_libraries(test_yaml_cpp_struct PUBLIC yaml-cpp)
+
+add_executable(test_boost_mysql src/test_boost_mysql.cpp)
+xrepo_target_packages(test_boost_mysql PUBLIC spdlog libmysql folly NO_LINK_LIBRARIES)
+target_link_libraries(test_boost_mysql PUBLIC
+    folly glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
+    boost_context-mt boost_program_options-mt boost_system-mt boost_thread-mt boost_regex-mt boost_filesystem-mt boost_atomic-mt
+    ssl crypto pthread dl
+)
