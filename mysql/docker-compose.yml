@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb:10.7.1
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: mybb
+      MYSQL_USER: mybb
+      MYSQL_PASSWORD: changeme
+    logging:
+      driver: syslog
+    networks:
+      - backend
+    restart: on-failure
+    volumes:
+     - ${PWD}/mariadb:/var/lib/mysql
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
