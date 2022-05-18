@@ -46,7 +46,7 @@ find_package(AWSSDK COMPONENTS core)
 find_package(AWSSDK COMPONENTS dynamodb)
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/f/folly/xmake.lua)
-xrepo_package("folly 2022.05.02" DEPS "conan::libiberty/9.1.0" "boost 1.79.0" "openssl 1.1.1n" "libevent 2.1.12" "gflags v2.2.2" "glog v0.5.0" "fmt 8.1.1" "zlib v1.2.12" "double-conversion v3.1.5" "bzip2 1.0.8" "lz4 v1.9.3" "zstd v1.5.2")
+xrepo_package("folly 2022.05.16" DEPS "conan::libiberty/9.1.0" "boost 1.79.0" "openssl 1.1.1n" "libevent 2.1.12" "gflags v2.2.2" "glog v0.5.0" "fmt 8.1.1" "zlib v1.2.12" "double-conversion v3.1.5" "bzip2 1.0.8" "lz4 v1.9.3" "zstd v1.5.2")
 # find_package(folly REQUIRED)
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/r/redis-plus-plus/xmake.lua)
