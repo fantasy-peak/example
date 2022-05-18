@@ -294,9 +294,11 @@ int main() {
 				spdlog::error("read result incomplete");
 				exit(1);
 			}
-			std::stringstream ss;
-			ss << rows[0];
-			spdlog::info("{}", ss.str());
+			if (!rows.empty()) {
+				std::stringstream ss;
+				ss << rows[0];
+				spdlog::info("{}", ss.str());
+			}
 		}
 	}());
 	ctx_pool.stop();
