@@ -23,7 +23,7 @@ make install
 // https://xmake.io/#/zh-cn/guide/installation
 git clone --recursive https://github.com/xmake-io/xmake.git
 cd ./xmake
-git checkout 2d3313ba1a2aa40350be90d52082f2e0f2cfedb4
+git checkout 34a0c28d63953f48ab4d9e552a46dd70b787d069
 make build
 ./scripts/get.sh __local__ __install_only__
 source ~/.xmake/profile

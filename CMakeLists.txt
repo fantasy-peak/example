@@ -17,6 +17,7 @@ if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
 endif()
 
 set(XREPO_PACKAGE_VERBOSE ON)
+set(XREPO_BOOTSTRAP_XMAKE OFF)
 set(XREPO_BUILD_PARALLEL_JOBS 12)
 
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
