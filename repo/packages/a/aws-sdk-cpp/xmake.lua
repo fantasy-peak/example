@@ -5,7 +5,7 @@ set_description("")
 
 add_urls("https://github.com/aws/aws-sdk-cpp.git")
 
-add_deps("openssl 1.1.1n", {system=false})
+add_deps("openssl", {system=false})
 add_deps("libcurl", {system=false})
 add_deps("c-ares", {optional = true})
 

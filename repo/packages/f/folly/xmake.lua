@@ -22,7 +22,7 @@ package("folly")
 
     add_deps("cmake")
     add_deps("conan::libiberty/9.1.0", {alias = "libiberty"})
-    add_deps("openssl 1.1.1n", {system=false})
+    add_deps("openssl", {system=false})
     add_deps("boost 1.79.0", {system=false, configs = {context = true, filesystem = true, program_options = true, regex = true, system = true, thread = true}})
     add_deps("libevent 2.1.12", {system=false, configs = {openssl = true}})
     add_deps("gflags v2.2.2", {system=false})

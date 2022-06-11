@@ -10,7 +10,7 @@ package("grpc")
     add_deps("c-ares", {system=false})
     add_deps("protobuf-cpp 3.19.4", {system=false})
     add_deps("re2 2022.02.01", {system=false})
-    add_deps("openssl 1.1.1n", {system=false})
+    add_deps("openssl", {system=false})
     add_deps("zlib v1.2.12", {system=false})
 
     on_install("linux", function (package)
