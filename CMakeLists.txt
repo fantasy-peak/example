@@ -17,12 +17,15 @@ if(NOT EXISTS "${CMAKE_BINARY_DIR}/xrepo.cmake")
 endif()
 
 set(XREPO_PACKAGE_VERBOSE ON)
-set(XREPO_BOOTSTRAP_XMAKE OFF)
+set(XREPO_BOOTSTRAP_XMAKE ON)
+set(XMAKE_RELEASE_LATEST v2.6.7)
 set(XREPO_BUILD_PARALLEL_JOBS 12)
 
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
-
-execute_process(COMMAND xmake repo -a -g my_private_repo https://github.com/fantasy-peak/xmake-repo.git)
+if(NOT EXISTS "$ENV{HOME}/.xmake/repositories/my_private_repo/xmake.lua")
+    message(STATUS "add my_private_repo")
+    execute_process(COMMAND xmake repo -a -g my_private_repo https://github.com/fantasy-peak/xmake-repo.git)
+endif()
 
 #----------------------------------------------------------------------------------
 
