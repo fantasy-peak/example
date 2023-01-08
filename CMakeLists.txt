@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13.0)
 
 project(example)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 set(OPTFLAGS -gdwarf-2)
 set(WARNINGS -Wall -Wno-missing-field-initializers -Wno-ignored-qualifiers -g)
@@ -18,7 +18,7 @@ endif()
 
 set(XREPO_PACKAGE_VERBOSE ON)
 set(XREPO_BOOTSTRAP_XMAKE ON)
-set(XMAKE_RELEASE_LATEST v2.6.7)
+set(XMAKE_RELEASE_LATEST v2.7.5)
 set(XREPO_BUILD_PARALLEL_JOBS 12)
 
 include(${CMAKE_BINARY_DIR}/xrepo.cmake)
@@ -41,23 +41,23 @@ set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/d/drogon/xmake.lua
 xrepo_package("drogon" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0.9")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-lambda-cpp/xmake.lua)
-xrepo_package("aws-lambda-cpp" DEPS "openssl 1.1.1n" "libcurl")
+xrepo_package("aws-lambda-cpp" DEPS "openssl" "libcurl")
 find_package(aws-lambda-runtime REQUIRED)
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-sdk-cpp/xmake.lua)
-xrepo_package("aws-sdk-cpp" DEPS "openssl 1.1.1n" "libcurl" "c-ares")
+xrepo_package("aws-sdk-cpp" DEPS "openssl" "libcurl" "c-ares")
 find_package(AWSSDK COMPONENTS core)
 find_package(AWSSDK COMPONENTS dynamodb)
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/f/folly/xmake.lua)
-xrepo_package("folly 2022.05.16" DEPS "conan::libiberty/9.1.0" "boost 1.79.0" "openssl 1.1.1n" "libevent 2.1.12" "gflags v2.2.2" "glog v0.5.0" "fmt 8.1.1" "zlib v1.2.12" "double-conversion v3.1.5" "bzip2 1.0.8" "lz4 v1.9.3" "zstd v1.5.2")
+xrepo_package("folly 2022.05.16" DEPS "conan::libiberty/9.1.0" "boost 1.79.0" "openssl" "libevent 2.1.12" "gflags v2.2.2" "glog v0.5.0" "fmt 8.1.1" "zlib v1.2.12" "double-conversion v3.1.5" "bzip2 1.0.8" "lz4 v1.9.3" "zstd v1.5.2")
 # find_package(folly REQUIRED)
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/r/redis-plus-plus/xmake.lua)
 xrepo_package("redis-plus-plus" DEPS "hiredis" "boost 1.79.0")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/g/grpc/xmake.lua)
-xrepo_package("grpc" DEPS "c-ares 1.17.1" "protobuf-cpp 3.19.4" "re2 2022.02.01" "openssl 1.1.1n" "zlib v1.2.12")
+xrepo_package("grpc" DEPS "c-ares 1.17.1" "protobuf-cpp 3.19.4" "re2 2022.02.01" "openssl" "zlib v1.2.12")
 find_package(gRPC CONFIG REQUIRED)
 
 xrepo_package("sqlpp11" CONFIGS mariadb_connector=true)
@@ -67,10 +67,10 @@ set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/b/boost/xmake.lua)
 xrepo_package("boost 1.79.0" CONFIGS "context=true,filesystem=true,program_options=true,regex=true,system=true,thread=true")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/y/yaml_cpp_struct/xmake.lua)
-xrepo_package("yaml_cpp_struct main" DEPS "magic_enum" "visit_struct" "yaml-cpp")
+xrepo_package("yaml_cpp_struct v1.0.0" DEPS "magic_enum" "visit_struct" "yaml-cpp")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/l/libmysql/xmake.lua)
-xrepo_package("libmysql" DEPS "boost 1.79.0")
+xrepo_package("libmysql 0.2.0" DEPS "boost 1.79.0")
 
 #-----------------------------------------------------------------------------------
 
@@ -85,8 +85,8 @@ xrepo_target_packages(test PUBLIC sqlpp11 spdlog nlohmann_json aws-lambda-runtim
 target_link_libraries(test PUBLIC gRPC::gpr gRPC::upb gRPC::grpc gRPC::grpc++
     mysqlclient
     AWS::aws-lambda-runtime
-    ${AWSSDK_LINK_LIBRARIES}
     aws-cpp-sdk-dynamodb curl
+    ${AWSSDK_LINK_LIBRARIES}
     drogon trantor jsoncpp brotlidec brotlienc brotlicommon
     redis++ hiredis
     folly uv glog gflags double-conversion zstd lz4 event event_core event_extra iberty event_openssl event_pthreads fmt
@@ -124,8 +124,8 @@ add_executable(test_aws_lambda src/test_aws_lambda.cpp)
 xrepo_target_packages(test_aws_lambda PUBLIC nlohmann_json aws-lambda-runtime aws-sdk-cpp NO_LINK_LIBRARIES)
 target_link_libraries(test_aws_lambda PUBLIC
     AWS::aws-lambda-runtime
-    ${AWSSDK_LINK_LIBRARIES}
     aws-cpp-sdk-dynamodb curl
+    ${AWSSDK_LINK_LIBRARIES}
     ssl crypto pthread dl
 )
 

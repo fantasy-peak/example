@@ -30,9 +30,9 @@ make build
 ./scripts/get.sh __local__ __install_only__
 source ~/.xmake/profile
 // or
-wget https://github.com/xmake-io/xmake/releases/download/v2.7.1/xmake-v2.7.1.xz.run
-chmod 777 xmake-v2.7.1.xz.run
-./xmake-v2.7.1.xz.run
+wget https://github.com/xmake-io/xmake/releases/download/v2.7.5/xmake-v2.7.5.xz.run
+chmod 777 xmake-v2.7.5.xz.run
+./xmake-v2.7.5.xz.run
 
 git clone https://github.com/fantasy-peak/example.git
 cd example && mkdir build && cd build
