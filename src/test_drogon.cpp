@@ -71,7 +71,7 @@ public:
 	}
 };
 
-//valgrind --log-file=a.txt --tool=memcheck --leak-check=full -s ./test_drogon
+// valgrind --log-file=a.txt --tool=memcheck --leak-check=full -s ./test_drogon
 int main(int argc, char** argv) {
 	std::thread([] { drogon::app().addListener("127.0.0.1", 8848).setThreadNum(4).run(); }).detach();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -139,5 +139,25 @@ int main(int argc, char** argv) {
 	};
 	folly::coro::blockingWait(create_lazy_task());
 	drogon::app().quit();
+	spdlog::info("-----------------------");
+	{
+		trantor::EventLoopThreadPool thread_pool{1};
+		thread_pool.start();
+		auto loop_ptr = thread_pool.getNextLoop();
+		loop_ptr->runInLoop([] {
+			std::cout << std::this_thread::get_id() << std::endl;
+		});
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		loop_ptr->queueInLoop([]() {
+			std::cout << "queueInLoop:" << std::this_thread::get_id() << std::endl;
+			drogon::async_run([]() -> drogon::Task<> {
+				std::cout << "queueInLoop async_run:" << std::this_thread::get_id() << std::endl;
+				co_return;
+			});
+		});
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+		loop_ptr->quit();
+		std::cout << "end" << std::endl;
+	}
 	return 0;
 }

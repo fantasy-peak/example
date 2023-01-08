@@ -38,7 +38,7 @@ xrepo_package("spdlog v1.9.2")
 xrepo_package("nlohmann_json v3.10.5")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/d/drogon/xmake.lua)
-xrepo_package("drogon" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0.9")
+xrepo_package("drogon v1.8.2" DEPS "trantor" "jsoncpp 1.9.5" "zlib v1.2.12" "brotli 1.0.9")
 
 set(XREPO_XMAKEFILE ${CMAKE_CURRENT_SOURCE_DIR}/repo/packages/a/aws-lambda-cpp/xmake.lua)
 xrepo_package("aws-lambda-cpp" DEPS "openssl" "libcurl")
